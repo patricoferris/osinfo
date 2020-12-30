@@ -9,9 +9,9 @@ jobs:
     - uses: avsm/setup-ocaml@v1
       with:
         ocaml-version: "4.11.0"
-    - run: opam pin add explore.dev -n .
+    - run: opam pin add osinfo.dev -n .
     - name: External Dependencies
-      run: opam depext -y explore
+      run: opam depext -y osinfo
     - name: Dependencies
       run: opam install -t . --deps-only
     - name: Build
