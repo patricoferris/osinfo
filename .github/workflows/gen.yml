@@ -17,4 +17,6 @@ jobs:
     - name: Build
       run: opam exec -- dune build 
     - name: Generate
-      run: opam exec -- dune gen/main.exe > ubuntu
+      run: opam exec -- dune exec gen/main.exe > ubuntu
+    - name: Check
+      run: cat ubuntu
