@@ -1,3 +1,3 @@
 (executable
  (name main)
- (libraries osinfo sexplib bos))
+ (libraries osinfo sexplib bos opam-state))

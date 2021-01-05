@@ -16,4 +16,4 @@
 (package
  (name osinfo)
  (synopsis "Hardcoded OS information")
- (depends osrelease))
+ (depends fmt sexplib ocamlformat opam-state))

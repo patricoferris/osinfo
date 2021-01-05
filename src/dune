@@ -1,6 +1,6 @@
 (library
  (name osinfo)
  (public_name osinfo)
- (libraries osrelease sexplib)
+ (libraries sexplib bos fmt)
  (preprocess
   (pps ppx_sexp_conv)))

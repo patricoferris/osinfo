@@ -1,3 +1,0 @@
-pin-depends: [
-  ["osrelease.dev" "git+https://github.com/avsm/osrelease"]
-]
