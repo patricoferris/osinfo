@@ -2,7 +2,7 @@ name: Generate the OS information
 on: [ push ]
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: [ ubuntu-20.04, macos-latest, windows-latest ]
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
@@ -15,8 +15,4 @@ jobs:
     - name: Dependencies
       run: opam install -t . --deps-only
     - name: Build
-      run: opam exec -- dune build 
-    - name: Generate
-      run: opam exec -- dune exec gen/main.exe > ubuntu
-    - name: Check
-      run: cat ubuntu
+      run: opam exec -- dune build @install @runtest
