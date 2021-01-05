@@ -1,3 +1,9 @@
 (executable
  (name main)
  (libraries osinfo sexplib bos opam-state))
+
+(rule
+ (alias runtest)
+ (deps main.exe)
+ (action
+  (run ./main.exe)))
