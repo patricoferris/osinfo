@@ -6,4 +6,8 @@
  (alias runtest)
  (deps main.exe)
  (action
-  (run ./main.exe)))
+  (progn
+   (with-stdout-to
+    test.out
+    (run ./main.exe))
+   (run ./main.exe read test.out))))

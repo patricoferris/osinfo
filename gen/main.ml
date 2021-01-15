@@ -22,8 +22,9 @@ let format s =
 
 let read f =
   let module_name = String.capitalize_ascii in
+  let v_to_string v = String.split_on_char '.' v |> String.concat "_" in
   let pp ppf v =
-    let s = v.Osinfo.os |> module_name in
+    let s = (v.Osinfo.os |> module_name) ^ v_to_string v.os_version in
     let x = Fmt.str "module %s = struct\n let v = %a\nend" s Osinfo.pp v in
     Fmt.(pf ppf "%s" (format x))
   in
