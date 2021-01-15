@@ -36,7 +36,7 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Downloading artifacts
-        uses: 'actions/download-artifact'
+        uses: 'actions/download-artifact@v2'
         with: 
           path: artifacts
       - name: Display structure
