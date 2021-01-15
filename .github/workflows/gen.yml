@@ -20,6 +20,8 @@ jobs:
       run: opam install -t -y . --deps-only
     - name: Building
       run: "opam exec -- dune build @install @runtest"
+    - name: Run 
+      run: _build/default/gen/main.exe
     - name: Print
       run: cat _build/default/gen/generated.out && ls -R _build
     - name: Uploading

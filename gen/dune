@@ -8,8 +8,5 @@
  (action
   (progn
    (with-stdout-to
-    test.out
-    (run ./main.exe))
-   (with-stdout-to
     generated.out
-    (run ./main.exe read test.out)))))
+    (run ./main.exe)))))
