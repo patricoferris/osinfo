@@ -1,11 +1,11 @@
 name: Tests for osinfo
 on: [push, pull_request]
 jobs:
-  test:
+  generation:
     strategy:
       matrix:
         operating-system: [macos-latest, ubuntu-latest, windows-latest]
-        ocaml-version: [4.11.1, 4.10.2, 4.09.1]
+        ocaml-version: [ 4.11.1 ]
     runs-on: ${{ matrix.operating-system }}
     steps:
     - uses: actions/checkout@v2
@@ -22,5 +22,24 @@ jobs:
       run: opam exec -- dune build
     - name: Installing
       run: opam exec -- dune install
-    - name: Testing
-      run: opam exec -- dune runtest
+    - name: Generation
+      run: opam exec -- dune runtest > gen
+    - name: Uploading
+      uses: 'actions/upload-artifact@v2'
+      with: 
+        name: ${{ matrix.operating-system }}-${{ matrix.ocaml-version }}.ml
+  combining:
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        ocaml-version: [ 4.11.1 ]
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+      - name: Downloading artifacts
+        uses: 'actions/download-artifact'
+        with: 
+          path: artifacts
+      - name: Display structure
+        run: ls -R 
+        working-directory: artifacts
+    
