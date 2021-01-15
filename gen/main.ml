@@ -14,8 +14,11 @@ let write () =
 
 let format s =
   let ocamlformat = Bos.Cmd.(v "ocamlformat" % "--impl" % "-") in
-  Bos.OS.Cmd.(in_string s |> run_io ocamlformat |> out_string)
-  |> Rresult.R.get_ok |> fst
+  Bos.OS.Cmd.(in_string s |> run_io ocamlformat |> out_string) |> function
+  | Ok (t, _) -> t
+  | Error (`Msg m) ->
+      Format.printf "Failed: %s" m;
+      s
 
 let run v =
   let module_name = String.capitalize_ascii in
