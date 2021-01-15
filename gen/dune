@@ -10,4 +10,6 @@
    (with-stdout-to
     test.out
     (run ./main.exe))
-   (run ./main.exe read test.out))))
+   (with-stdout-to
+    generated.out
+    (run ./main.exe read test.out)))))

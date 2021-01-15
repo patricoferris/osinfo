@@ -23,12 +23,12 @@ jobs:
     - name: Installing
       run: opam exec -- dune install
     - name: Generation
-      run: opam exec -- dune runtest > generated.ml
+      run: opam exec -- dune runtest
     - name: Uploading
       uses: 'actions/upload-artifact@v2'
       with: 
         name: ${{ matrix.operating-system }}-${{ matrix.ocaml-version }}.ml
-        path: generated.ml
+        path: _build/default/gen/generated.out
   combining:
     needs: generation
     strategy:
@@ -43,5 +43,8 @@ jobs:
           path: artifacts
       - name: Display structure
         run: ls -R 
+        working-directory: artifacts
+      - name: Print combined
+        run: cat */generated.out > main.ml && cat main.ml
         working-directory: artifacts
     
