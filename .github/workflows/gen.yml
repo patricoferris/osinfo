@@ -19,13 +19,9 @@ jobs:
     - name: Dependencies
       run: opam install -t -y . --deps-only
     - name: Building
-      run: opam exec -- dune build
-    - name: Installing
-      run: opam exec -- dune install
-    - name: Generation
-      run: opam exec -- dune runtest
+      run: "opam exec -- dune build @install @runtest"
     - name: Print
-      run: cat _build/default/gen/generated.out
+      run: cat _build/default/gen/generated.out && ls -R _build
     - name: Uploading
       uses: 'actions/upload-artifact@v2'
       with: 
