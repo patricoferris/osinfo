@@ -24,10 +24,12 @@ jobs:
       run: opam exec -- dune install
     - name: Generation
       run: opam exec -- dune runtest
+    - name: Print
+      run: cat _build/default/gen/generated.out
     - name: Uploading
       uses: 'actions/upload-artifact@v2'
       with: 
-        name: ${{ matrix.operating-system }}-${{ matrix.ocaml-version }}.ml
+        name: ${{ matrix.operating-system }}-${{ matrix.ocaml-version }}
         path: _build/default/gen/generated.out
   combining:
     needs: generation
