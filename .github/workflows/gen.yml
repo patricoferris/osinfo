@@ -29,6 +29,7 @@ jobs:
       with: 
         name: ${{ matrix.operating-system }}-${{ matrix.ocaml-version }}.ml
   combining:
+    needs: generation
     strategy:
       matrix:
         operating-system: [ ubuntu-latest ]
