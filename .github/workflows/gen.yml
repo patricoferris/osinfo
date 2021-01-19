@@ -308,7 +308,7 @@ jobs:
         name: fedora32
         path: /home/opam/package/_build/default/gen/generated.out
   combining:
-    needs: [macos_and_windows, debian_10_buster, ubuntu_18_04, ubuntu_20_04, opensuse_15_2_leap, fedora32, centos_8]
+    needs: [macos_and_windows, debian_10_buster, ubuntu_18_04, ubuntu_20_04, opensuse_15_2_leap, fedora_32, centos_8]
     strategy:
       matrix:
         operating-system: [ ubuntu-latest ]
