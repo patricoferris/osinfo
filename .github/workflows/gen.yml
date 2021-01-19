@@ -1,11 +1,11 @@
 name: Tests for osinfo
 on: [push, pull_request]
 jobs:
-  test:
+  macos_and_windows:
     strategy:
       matrix:
-        operating-system: [macos-latest, ubuntu-latest, windows-latest]
-        ocaml-version: [4.11.1, 4.10.2, 4.09.1]
+        operating-system: [macos-latest, windows-latest]
+        ocaml-version: [ 4.11.1 ]
     runs-on: ${{ matrix.operating-system }}
     steps:
     - uses: actions/checkout@v2
@@ -19,8 +19,291 @@ jobs:
     - name: Dependencies
       run: opam install -t -y . --deps-only
     - name: Building
-      run: opam exec -- dune build
-    - name: Installing
-      run: opam exec -- dune install
-    - name: Testing
-      run: opam exec -- dune runtest
+      run: "opam exec -- dune build @install @runtest"
+    - name: Run 
+      run: _build/default/gen/main.exe
+    - name: Uploading
+      uses: 'actions/upload-artifact@v2'
+      with: 
+        name: ${{ matrix.operating-system }}-${{ matrix.ocaml-version }}
+        path: _build/default/gen/generated.out
+  debian_10_buster:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:99d74562948284e9168cd8c914973ff4c08428b7c278815470cc4c13e0869d82
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e e5db16dc7bf8332d675f68befe044cc861c45560
+        || git fetch origin master) && git reset -q --hard e5db16dc7bf8332d675f68befe044cc861c45560
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn osinfo.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt osinfo.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+    - name: Run 
+      run: _build/default/gen/main.exe
+      working-directory: /home/opam/package
+    - name: Uploading
+      uses: 'actions/upload-artifact@v2'
+      with: 
+        name: debian_10_buster
+        path: /home/opam/package/_build/default/gen/generated.out
+  alpine_3_12:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:0ba6fff03e0129d0ffba7bdc5aad74368a5a61dd83292cad0ed5bc5a271b94d0
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e e5db16dc7bf8332d675f68befe044cc861c45560
+        || git fetch origin master) && git reset -q --hard e5db16dc7bf8332d675f68befe044cc861c45560
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn osinfo.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt osinfo.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+    - name: Run 
+      run: _build/default/gen/main.exe
+      working-directory: /home/opam/package
+    - name: Uploading
+      uses: 'actions/upload-artifact@v2'
+      with: 
+        name: alpine_3_12
+        path: /home/opam/package/_build/default/gen/generated.out
+  ubuntu_18_04:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:6d7e2a13b0eda3a1e68ec24dc95728f7abda826d6e8061a8933eff6f083e2c2d
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e e5db16dc7bf8332d675f68befe044cc861c45560
+        || git fetch origin master) && git reset -q --hard e5db16dc7bf8332d675f68befe044cc861c45560
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn osinfo.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt osinfo.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+    - name: Run 
+      run: _build/default/gen/main.exe
+      working-directory: /home/opam/package
+    - name: Uploading
+      uses: 'actions/upload-artifact@v2'
+      with: 
+        name: ubuntu_18_04
+        path: /home/opam/package/_build/default/gen/generated.out
+  opensuse_15_2_leap:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:b7dfb37a39006402c0008c9413d9fa6d81fcb9dbe17bd983a4f706cc15c5eacf
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e e5db16dc7bf8332d675f68befe044cc861c45560
+        || git fetch origin master) && git reset -q --hard e5db16dc7bf8332d675f68befe044cc861c45560
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn osinfo.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt osinfo.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+    - name: Run 
+      run: _build/default/gen/main.exe
+      working-directory: /home/opam/package
+    - name: Uploading
+      uses: 'actions/upload-artifact@v2'
+      with: 
+        name: opensuse15
+        path: /home/opam/package/_build/default/gen/generated.out
+  centos_8:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:f064aa4551fde259395c039cbdaeb6a86608642aec0b7293dd3e1b868645c6c4
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e e5db16dc7bf8332d675f68befe044cc861c45560
+        || git fetch origin master) && git reset -q --hard e5db16dc7bf8332d675f68befe044cc861c45560
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn osinfo.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt osinfo.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+    - name: Run 
+      run: _build/default/gen/main.exe
+      working-directory: /home/opam/package
+    - name: Uploading
+      uses: 'actions/upload-artifact@v2'
+      with: 
+        name: centos_8
+        path: /home/opam/package/_build/default/gen/generated.out
+  fedora_32:
+    runs-on: ubuntu-latest
+    container:
+      image: ocaml/opam@sha256:0d1d5cfa3eef21b9dbe533b6451257b5bea37c4852c38b29cc9de4d275b2218d
+      env:
+        HOME: /home/opam
+      options: --user 1000
+    env:
+      HOME: /home/opam
+    defaults:
+      run:
+        working-directory: /home/opam
+    steps:
+    - run: cd ~/opam-repository && (git cat-file -e e5db16dc7bf8332d675f68befe044cc861c45560
+        || git fetch origin master) && git reset -q --hard e5db16dc7bf8332d675f68befe044cc861c45560
+        && git log --no-decorate -n1 --oneline && opam update -u
+    - run: mkdir -p /home/opam/package
+    - name: Cloning
+      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      working-directory: /home/opam/package
+    - name: Pinning Packages
+      run: opam pin add -yn osinfo.dev './'
+      working-directory: /home/opam/package
+    - name: Installing external dependencies
+      run: opam depext -yt osinfo.dev
+      working-directory: /home/opam/package
+    - name: Installing dependencies
+      run: opam install -t -y . --deps-only
+      working-directory: /home/opam/package
+    - name: Building, installing & testing
+      run: opam exec -- dune build @install @runtest
+      working-directory: /home/opam/package
+    - name: Run 
+      run: _build/default/gen/main.exe
+      working-directory: /home/opam/package
+    - name: Uploading
+      uses: 'actions/upload-artifact@v2'
+      with: 
+        name: fedora32
+        path: /home/opam/package/_build/default/gen/generated.out
+  combining:
+    needs: [macos_and_windows, debian_10_buster, ubuntu_18_04, opensuse_15_2_leap, fedora_32, centos_8, alpine_3_12]
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        ocaml-version: [ 4.11.1 ]
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: avsm/setup-ocaml@v1
+      - name: Downloading artifacts
+        uses: 'actions/download-artifact@v2'
+        with: 
+          path: artifacts
+      - name: Print combined
+        run: | 
+          echo "open Types" > $GITHUB_WORKSPACE/src/os.ml
+          cat */generated.out >> $GITHUB_WORKSPACE/src/os.ml && cat $GITHUB_WORKSPACE/src/os.ml
+        working-directory: artifacts
+      - name: Remove artifacts
+        run: rm -rf artifacts
+      - name: Pinning Packages
+        run: opam pin add -yn osinfo.dev './'
+      - name: Installing external dependencies
+        run: opam depext -yt osinfo.dev
+      - name: Installing dependencies
+        run: opam install -t -y . --deps-only
+      - name: Building, installing & testing
+        run: opam exec -- dune build @install @runtest
+      - name: Run OCamlformat 
+        run: opam exec -- ocamlformat ./src/os.ml --output=./src/os.ml
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with: 
+          title: Update OS Variables
+          body: Automated changes via GHA
+          commit-message: update os variables
+          branch: ci-generated-update
+          
+    
