@@ -1,0 +1,3 @@
+(executable
+ (name test)
+ (libraries opam-0install osinfo))

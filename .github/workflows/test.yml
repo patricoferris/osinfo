@@ -1,0 +1,26 @@
+name: OCaml-CI
+on: [push, pull_request]
+jobs:
+  macos_and_windows:
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        ocaml-version: [4.11.1]
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: avsm/setup-ocaml@v1
+      with:
+        ocaml-version: ${{ matrix.ocaml-version }}
+    - name: Checkout opams 
+      run: |
+        git clone --depth=1 https://github.com/ocaml/opam-repository /tmp/opam-repository
+        git clone --depth=1 https://github.com/fdopen/opam-repository-mingw /tmp/opam-repository-mingw
+    - name: Pinning Package
+      run: opam pin add -yn osinfo.dev './'
+    - name: Packages
+      run: opam depext -yt osinfo.dev
+    - name: Dependencies
+      run: opam install -t -y . --deps-only
+    - name: Building, Installing and Testing
+      run: opam exec -- dune build @install @runtest
