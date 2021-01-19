@@ -281,10 +281,22 @@ jobs:
         with: 
           path: artifacts
       - name: Print combined
-        run: cat */generated.out > $GITHUB_WORKSPACE/src/main.ml && cat $GITHUB_WORKSPACE/src/main.ml
+        run: | 
+          echo "open Types\n" > GITHUB_WORKSPACE/src/os.ml
+          cat */generated.out >> $GITHUB_WORKSPACE/src/os.ml && cat $GITHUB_WORKSPACE/src/os.ml
         working-directory: artifacts
       - name: Remove artifacts
         run: rm -rf artifacts
+      - name: Pinning Packages
+        run: opam pin add -yn osinfo.dev './'
+      - name: Installing external dependencies
+        run: opam depext -yt osinfo.dev
+      - name: Installing dependencies
+        run: opam install -t -y . --deps-only
+      - name: Building, installing & testing
+        run: opam exec -- dune build @install @runtest
+      - name: Run OCamlformat 
+        run: opam exec -- ocamlformat ./src/os.ml --output=./src/os.ml
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with: 
