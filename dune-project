@@ -25,4 +25,5 @@
   sexplib
   (ocamlformat
    (= 0.15.0))
-  (opam-state :with-test)))
+  (opam-state :with-test)
+  (opam-0install :with-test)))
