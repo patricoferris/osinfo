@@ -1,3 +1,3 @@
-(executable
+(test
  (name test)
- (libraries opam-0install osinfo))
+ (libraries opam-0install fmt osinfo))

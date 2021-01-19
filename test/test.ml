@@ -37,9 +37,10 @@ let () =
     match result with
     | Error e -> print_endline (Solver.diagnostics e)
     | Ok selections ->
-        Solver.packages_of_result selections
-        |> List.iter (fun pkg ->
-               Printf.printf "%s - %s\n" name (OpamPackage.to_string pkg))
+        let pkgs = Solver.packages_of_result selections in
+        Fmt.(
+          pf stdout "Solved for %s: [ %a ]\n\n" name (list ~sep:comma string)
+            (List.map OpamPackage.to_string pkgs))
   in
   List.iter build (List.map unix_context unixes);
   build windows_context
