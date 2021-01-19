@@ -66,8 +66,7 @@ jobs:
       uses: 'actions/upload-artifact@v2'
       with: 
         name: debian_10_buster
-        path: _build/default/gen/generated.out
-      working-directory: /home/opam/package
+        path: /home/opam/package/_build/default/gen/generated.out
   alpine_3_12:
     runs-on: ubuntu-latest
     container:
@@ -107,8 +106,7 @@ jobs:
       uses: 'actions/upload-artifact@v2'
       with: 
         name: alpine_3_12
-        path: _build/default/gen/generated.out
-      working-directory: /home/opam/package
+        path: /home/opam/package/_build/default/gen/generated.out
   ubuntu_20_04:
     runs-on: ubuntu-latest
     container:
@@ -148,8 +146,7 @@ jobs:
       uses: 'actions/upload-artifact@v2'
       with: 
         name: ubuntu_20_04
-        path: _build/default/gen/generated.out
-      working-directory: /home/opam/package
+        path: /home/opam/package/_build/default/gen/generated.out
   ubuntu_18_04:
     runs-on: ubuntu-latest
     container:
@@ -189,8 +186,7 @@ jobs:
       uses: 'actions/upload-artifact@v2'
       with: 
         name: ubuntu_18_04
-        path: _build/default/gen/generated.out
-      working-directory: /home/opam/package
+        path: /home/opam/package/_build/default/gen/generated.out
   opensuse_15_2_leap:
     runs-on: ubuntu-latest
     container:
@@ -230,8 +226,7 @@ jobs:
       uses: 'actions/upload-artifact@v2'
       with: 
         name: opensuse15
-        path: _build/default/gen/generated.out
-      working-directory: /home/opam/package
+        path: /home/opam/package/_build/default/gen/generated.out
   centos_8:
     runs-on: ubuntu-latest
     container:
@@ -271,8 +266,7 @@ jobs:
       uses: 'actions/upload-artifact@v2'
       with: 
         name: centos_8
-        path: _build/default/gen/generated.out
-      working-directory: /home/opam/package
+        path: /home/opam/package/_build/default/gen/generated.out
   fedora_32:
     runs-on: ubuntu-latest
     container:
@@ -312,8 +306,7 @@ jobs:
       uses: 'actions/upload-artifact@v2'
       with: 
         name: fedora32
-        path: _build/default/gen/generated.out
-      working-directory: /home/opam/package
+        path: /home/opam/package/_build/default/gen/generated.out
   combining:
     needs: [macos_and_windows, debian_10_buster, ubuntu_18_04, ubuntu_20_04, opensuse_15_2_leap, fedora32, centos_8]
     strategy:
