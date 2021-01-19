@@ -26,7 +26,7 @@ let run v =
   let pp ppf v =
     let s = (v.Osinfo.os |> module_name) ^ v_to_string v.os_version in
     let x = Fmt.str "module %s = struct\n let v = %a\nend" s Osinfo.pp v in
-    Fmt.(pf ppf "%s" (format x))
+    Fmt.(pf ppf "%s\n" (format x))
   in
   pp Format.std_formatter v
 
