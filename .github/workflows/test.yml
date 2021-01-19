@@ -1,7 +1,7 @@
 name: OCaml-CI
 on: [push, pull_request]
 jobs:
-  macos_and_windows:
+  solver:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
