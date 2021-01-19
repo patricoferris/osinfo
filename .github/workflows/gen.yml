@@ -282,7 +282,7 @@ jobs:
           path: artifacts
       - name: Print combined
         run: | 
-          echo "open Types\n" > GITHUB_WORKSPACE/src/os.ml
+          echo "open Types\n" > $GITHUB_WORKSPACE/src/os.ml
           cat */generated.out >> $GITHUB_WORKSPACE/src/os.ml && cat $GITHUB_WORKSPACE/src/os.ml
         working-directory: artifacts
       - name: Remove artifacts
