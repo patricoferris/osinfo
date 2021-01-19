@@ -282,7 +282,16 @@ jobs:
       - name: Display structure
         run: ls -R 
         working-directory: artifacts
+      - uses: actions/checkout@v2
       - name: Print combined
-        run: cat */generated.out > main.ml && cat main.ml
+        run: cat */generated.out > $GITHUB_WORKSPACE/src/main.ml && cat $GITHUB_WORKSPACE/src/main.ml
         working-directory: artifacts
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with: 
+          title: Update OS Variables
+          body: Automated changes via GHA
+          commit-message: update os variables
+          branch: ci-generated-update
+          
     

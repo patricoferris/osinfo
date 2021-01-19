@@ -1,5 +1,4 @@
 (library
- (name osinfo)
  (public_name osinfo)
  (libraries sexplib bos fmt)
  (preprocess
