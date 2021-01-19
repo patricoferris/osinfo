@@ -107,46 +107,6 @@ jobs:
       with: 
         name: alpine_3_12
         path: /home/opam/package/_build/default/gen/generated.out
-  ubuntu_20_04:
-    runs-on: ubuntu-latest
-    container:
-      image: ocaml/opam@sha256:4b60488b71c6a3e3d2b4da17d66fc578f1de05a427d5691ec48c1c7d9e1a43a8
-      env:
-        HOME: /home/opam
-      options: --user 1000
-    env:
-      HOME: /home/opam
-    defaults:
-      run:
-        working-directory: /home/opam
-    steps:
-    - run: cd ~/opam-repository && (git cat-file -e e5db16dc7bf8332d675f68befe044cc861c45560
-        || git fetch origin master) && git reset -q --hard e5db16dc7bf8332d675f68befe044cc861c45560
-        && git log --no-decorate -n1 --oneline && opam update -u
-    - run: mkdir -p /home/opam/package
-    - name: Cloning
-      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
-      working-directory: /home/opam/package
-    - name: Pinning Packages
-      run: opam pin add -yn osinfo.dev './'
-      working-directory: /home/opam/package
-    - name: Installing external dependencies
-      run: opam depext -yt osinfo.dev
-      working-directory: /home/opam/package
-    - name: Installing dependencies
-      run: opam install -t -y . --deps-only
-      working-directory: /home/opam/package
-    - name: Building, installing & testing
-      run: opam exec -- dune build @install @runtest
-      working-directory: /home/opam/package
-    - name: Run 
-      run: _build/default/gen/main.exe
-      working-directory: /home/opam/package
-    - name: Uploading
-      uses: 'actions/upload-artifact@v2'
-      with: 
-        name: ubuntu_20_04
-        path: /home/opam/package/_build/default/gen/generated.out
   ubuntu_18_04:
     runs-on: ubuntu-latest
     container:
